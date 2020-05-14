@@ -16,8 +16,12 @@ import { readdirSync } from "fs";
 
 const outDir = `${tmpdir()}${sep}vscode_vlang${sep}`;
 export const collection = languages.createDiagnosticCollection("V");
-const checkMainModule = (text: string) => !!text.match(/^\s*(module)+\s+main/);
-const checkMainFn = (text: string) => !!text.match(/^\s*(fn)+\s+main/);
+
+function checkMainFnAndMainModule(text: string) {
+	const checkMainModule = (text: string) => !!text.match(/^\s*(module)+\s+main/);
+	const checkMainFn = (text: string) => !!text.match(/^\s*(fn)+\s+main/);
+	return checkMainFn(text) || checkMainModule(text);
+}
 
 export function lint(document: TextDocument): boolean {
 	const workspaceFolder = getWorkspaceFolder(document.uri);
@@ -28,8 +32,7 @@ export function lint(document: TextDocument): boolean {
 	const foldername = dirname(document.fileName);
 	const vFiles = readdirSync(foldername).filter((f) => f.endsWith(".v"));
 	const fileCount = vFiles.length;
-	const isMainModule =
-		checkMainModule(document.getText()) || checkMainFn(document.getText());
+	const isMainModule = checkMainFnAndMainModule(document.getText());
 	const shared = !isMainModule ? "-shared" : "";
 	let haveMultipleMainFn = fileCount > 1 && isMainModule;
 
@@ -38,8 +41,7 @@ export function lint(document: TextDocument): boolean {
 		vFiles.forEach(async (f) => {
 			f = resolve(foldername, f);
 			const fDocument = await workspace.openTextDocument(f);
-			filesAreMainModule =
-				checkMainModule(fDocument.getText()) || checkMainFn(fDocument.getText());
+			filesAreMainModule = checkMainFnAndMainModule(fDocument.getText());
 		});
 		haveMultipleMainFn = filesAreMainModule;
 	}
