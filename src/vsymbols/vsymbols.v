@@ -46,6 +46,9 @@ struct Input {
 }
 
 fn main() {
+	args := os.args[1..]
+	debug := '-debug' in args
+
 	stdin := os.get_lines_joined()
 	input := json.decode(Input, stdin) or { eprintln(invalid_input_message) }
 
@@ -59,6 +62,7 @@ fn main() {
 	fscope := ast.Scope{ parent: 0 }
 	prefs := pref.Preferences{}
 	table := table.new_table()
+
 	mut ctx := Context{
 		file: File{ 
 			path: input.filepath 
@@ -93,9 +97,12 @@ fn main() {
 	}
 
 	println(json.encode(ctx.file))
-	// for symbol in ctx.file.symbols {
-	// 	println(symbol)
-	// }
+	
+	if debug {
+		for symbol in ctx.file.symbols {
+			println(symbol)
+		}
+	}
 }
 
 /* --------------------------------- STRUCT --------------------------------- */
