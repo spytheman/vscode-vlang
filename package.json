@@ -156,7 +156,7 @@
 		"onCommand:v.ver",
 		"onCommand:v.path"
 	],
-	"main": "./out/extension.js",
+	"main": "./out/main.js",
 	"dependencies": {
 		"vscode-languageclient": "~5.2.1"
 	},

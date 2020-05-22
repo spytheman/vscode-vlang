@@ -6,10 +6,10 @@ const path = require("path");
 /**@type {import('webpack').Configuration}*/
 const config = {
 	target: "node",
-	entry: "./src/client/extension.ts",
+	entry: "./src/client/main.ts",
 	output: {
 		path: path.resolve(__dirname, "out"),
-		filename: "extension.js",
+		filename: "main.js",
 		libraryTarget: "commonjs2",
 		devtoolModuleFilenameTemplate: "../[resource-path]",
 	},
