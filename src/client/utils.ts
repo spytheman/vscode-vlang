@@ -1,12 +1,4 @@
-import {
-	Range,
-	TextDocument,
-	workspace,
-	WorkspaceConfiguration,
-	window,
-	Uri,
-	WorkspaceFolder,
-} from "vscode";
+import { Range, TextDocument, workspace, WorkspaceConfiguration, window, Uri, WorkspaceFolder } from "vscode";
 import { existsSync, mkdirSync, readdir, unlink } from "fs";
 import { tmpdir } from "os";
 import { sep, join } from "path";
@@ -25,31 +17,29 @@ export function fullDocumentRange(document: TextDocument): Range {
  * If user don't specify it, then get default command
  */
 export function getVExecCommand(): string {
-	const config = getVConfig();
+	const config = getWorkspaceConfig();
 	const vPath = config.get("pathToExecutableFile", "") || defaultCommand;
 	return vPath;
 }
 
-/** Get V configuration.
- * Will look at
- */
-export function getVConfig(): WorkspaceConfiguration {
+/** Get V workspace configuration. */
+export function getWorkspaceConfig(): WorkspaceConfiguration {
 	const currentDoc = getCurrentDocument();
 	const uri = currentDoc ? currentDoc.uri : null;
 	return workspace.getConfiguration("v", uri);
 }
 
+/** Get current working directory */
 export function getCwd(uri?: Uri): string {
 	const folder = getWorkspaceFolder(uri || null);
 	return folder.uri.fsPath;
 }
 
+/** Get workspace folder */
 export function getWorkspaceFolder(uri?: Uri): WorkspaceFolder {
 	if (uri) return workspace.getWorkspaceFolder(uri);
 	const currentDoc = getCurrentDocument();
-	return currentDoc
-		? workspace.getWorkspaceFolder(currentDoc.uri)
-		: workspace.workspaceFolders[0];
+	return currentDoc ? workspace.getWorkspaceFolder(currentDoc.uri) : workspace.workspaceFolders[0];
 }
 
 export function getCurrentDocument(): TextDocument {
