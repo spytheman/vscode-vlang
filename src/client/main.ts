@@ -3,9 +3,7 @@ import * as commands from "./commands";
 import { registerFormatter } from "./format";
 import { attachOnCloseTerminalListener } from "./exec";
 import { lint, collection } from "./linter";
-import { clearTempFolder, getWorkspaceConfig } from "./utils";
-
-const vLanguageId = "v";
+import { clearTempFolder, getWorkspaceConfig, vLanguageID } from "./utils";
 
 const cmds = {
 	"v.run": commands.run,
@@ -37,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.workspace.onDidCloseTextDocument(didCloseTextDocument)
 		);
 		// If there are V files open, do the lint immediately
-		if (vscode.window.activeTextEditor && vscode.window.activeTextEditor.document.languageId === vLanguageId) {
+		if (vscode.window.activeTextEditor && vscode.window.activeTextEditor.document.languageId === vLanguageID) {
 			lint(vscode.window.activeTextEditor.document);
 		}
 	}
@@ -48,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
  */
 function didChangeVisibleTextEditors(editors: Array<vscode.TextEditor>) {
 	editors.forEach((editor) => {
-		if (editor.document.languageId === vLanguageId) {
+		if (editor.document.languageId === vLanguageID) {
 			lint(editor.document);
 		}
 	});
@@ -58,7 +56,7 @@ function didChangeVisibleTextEditors(editors: Array<vscode.TextEditor>) {
  *  Handles the `onDidSaveTextDocument` event
  */
 function didSaveTextDocument(document: vscode.TextDocument) {
-	if (document.languageId === vLanguageId) {
+	if (document.languageId === vLanguageID) {
 		lint(document);
 	}
 }
@@ -67,7 +65,7 @@ function didSaveTextDocument(document: vscode.TextDocument) {
  *  Handles the `onDidCloseTextDocument` event
  */
 function didCloseTextDocument(document: vscode.TextDocument) {
-	if (document.languageId === vLanguageId) {
+	if (document.languageId === vLanguageID) {
 		if (!vscode.window.activeTextEditor) collection.clear();
 		collection.delete(document.uri);
 	}

@@ -6,6 +6,8 @@ import { sep, join } from "path";
 const TEMP_DIR = `${tmpdir()}${sep}vscode_vlang`;
 const defaultCommand = "v";
 
+export const vLanguageID = "v";
+
 /** Get full range of the document. */
 export function fullDocumentRange(document: TextDocument): Range {
 	const lastLineId = document.lineCount - 1;
