@@ -1,4 +1,4 @@
-declare interface VSettings {
+export declare interface VSettings {
 	format?: { args: string };
 	pathToExecutableFile?: string;
 	linter?: {
