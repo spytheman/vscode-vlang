@@ -23,8 +23,13 @@ let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 // let hasDiagnosticRelatedInformationCapability: boolean = false;
 
+function log(params: any): string {
+	return JSON.stringify(params || {});
+}
+
 /* ------------------------------- INITIALIZE ------------------------------- */
 connection.onInitialize((params: InitializeParams) => {
+	log(params);
 	let capabilities = params.capabilities;
 	hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
 	hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
@@ -44,7 +49,8 @@ connection.onInitialize((params: InitializeParams) => {
 });
 
 /* ------------------------------- INITIALIZED ------------------------------ */
-connection.onInitialized(() => {
+connection.onInitialized((params) => {
+	log(params);
 	if (hasConfigurationCapability) {
 		connection.client.register(DidChangeConfigurationNotification.type, undefined);
 	}

@@ -38,7 +38,6 @@ export function activate(context: ExtensionContext) {
 		.then(() => {
 			prepareStatus.text = `$(check) ${languageServerName} is ready!`;
 			client.registerProposedFeatures();
-			client.sendRequest("initialize");
 		})
 		.catch(() => (prepareStatus.text = `$(close) ${languageServerName} is failed`))
 		.finally(() => setTimeout(() => prepareStatus.dispose(), 5000));

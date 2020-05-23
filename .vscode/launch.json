@@ -17,7 +17,7 @@
 			"name": "Attach to Server",
 			"port": 6011,
 			"outFiles": [
-				"${workspaceRoot}/out/server/*.js"
+				"${workspaceRoot}/out/server.js"
 			],
 			"restart": true,
 		},
