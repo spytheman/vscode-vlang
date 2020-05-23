@@ -4,6 +4,7 @@ import { registerFormatter } from "./format";
 import { attachOnCloseTerminalListener } from "./exec";
 import { lint, collection } from "./linter";
 import { clearTempFolder, getWorkspaceConfig, vLanguageID } from "./utils";
+import * as langServer from "./langClient";
 
 const cmds = {
 	"v.run": commands.run,
@@ -27,6 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	context.subscriptions.push(registerFormatter(), attachOnCloseTerminalListener());
+
+	langServer.activate(context);
 
 	if (getWorkspaceConfig().get("linter.enabled")) {
 		context.subscriptions.push(
@@ -75,5 +78,6 @@ function didCloseTextDocument(document: vscode.TextDocument) {
  * This method is called when the extension is deactivated.
  */
 export function deactivate() {
+	langServer.deactivate();
 	clearTempFolder();
 }

@@ -8,4 +8,5 @@ export const defaultSettings: VSettings = {
 		// -1 means infinity 😄
 		maxNumberOfProblems: -1,
 	},
+	vls: { enable: true },
 };
