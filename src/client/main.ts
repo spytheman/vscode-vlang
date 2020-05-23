@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(registerFormatter(), attachOnCloseTerminalListener());
 
-	if (getWorkspaceConfig().get("enableLinter")) {
+	if (getWorkspaceConfig().get("linter.enabled")) {
 		context.subscriptions.push(
 			vscode.window.onDidChangeVisibleTextEditors(didChangeVisibleTextEditors),
 			vscode.workspace.onDidSaveTextDocument(didSaveTextDocument),
