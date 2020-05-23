@@ -84,6 +84,12 @@
 					"type": "number",
 					"default": -1,
 					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"v.vls.enable": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to enable the V language server. Changes require restart."
 				}
 			}
 		},

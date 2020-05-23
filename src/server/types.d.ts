@@ -5,4 +5,5 @@ export declare interface VSettings {
 		enable?: boolean;
 		maxNumberOfProblems?: number;
 	};
+	vls: { enable: boolean };
 }
