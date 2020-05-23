@@ -73,7 +73,7 @@
 					"default": "",
 					"description": "Path to V executable file"
 				},
-				"v.enableLinter": {
+				"v.linter.enable": {
 					"scope": "resource",
 					"type": "boolean",
 					"default": true,
