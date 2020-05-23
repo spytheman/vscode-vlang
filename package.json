@@ -70,7 +70,7 @@
 				"v.pathToExecutableFile": {
 					"scope": "resource",
 					"type": "string",
-					"default": "",
+					"default": "v",
 					"description": "Path to V executable file"
 				},
 				"v.linter.enable": {
