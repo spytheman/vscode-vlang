@@ -3,13 +3,18 @@
 
 const path = require("path");
 
+// ["./src/client/main.ts", "./src/server/main.ts"];
+
 /**@type {import('webpack').Configuration}*/
 const config = {
 	target: "node",
-	entry: "./src/client/main.ts",
+	entry: {
+		main: "./src/client/main.ts",
+		server: "./src/server/main.ts",
+	},
 	output: {
 		path: path.resolve(__dirname, "out"),
-		filename: "main.js",
+		filename: "[name].js",
 		libraryTarget: "commonjs2",
 		devtoolModuleFilenameTemplate: "../[resource-path]",
 	},
