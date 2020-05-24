@@ -11,7 +11,7 @@ import json
 import crypto.md5
 
 const (
-	our_temp_dir = os.join_path(os.temp_dir(), 'vsymbols')
+	vs_temp_dir = os.join_path(os.temp_dir(), 'vsymbols')
 	invalid_input_message = 'Failed to parse json, Please make sure that the input is a JSON string'
 )
 
@@ -50,11 +50,14 @@ fn main() {
 	debug := '-debug' in args
 
 	stdin := os.get_lines_joined()
-	input := json.decode(Input, stdin) or { eprintln(invalid_input_message) }
+	input := json.decode(Input, stdin) or { 
+		eprintln(invalid_input_message)
+		return
+	}
 
 	// Create temp dir if not exist
-	if !os.exists(our_temp_dir) {
-		os.mkdir(our_temp_dir) or { panic(err) }
+	if !os.exists(vs_temp_dir) {
+		os.mkdir(vs_temp_dir) or { panic(err) }
 	}
 	
 	filename := create_temp_file(input.filepath, input.source)
@@ -179,7 +182,7 @@ fn get_real_name(name string) string {
 fn create_temp_file(filename, content string) string {
 	if content.len < 3 { return filename }
 	hashed_name := md5.sum(filename.bytes()).hex()
-	target := os.join_path(our_temp_dir, hashed_name)
+	target := os.join_path(vs_temp_dir, hashed_name)
 	os.write_file(target, content)
 	return target
 }
