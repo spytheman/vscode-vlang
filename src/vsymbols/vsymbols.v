@@ -25,14 +25,14 @@ mut:
 	temp_path		string
 	path			string
 	module_name		string
-	symbols			[]SymbolInfo
+	symbols			[]SymbolInformation
 }
 
-struct SymbolInfo {
+struct SymbolInformation {
 	name		string
 	pos			Position
 	real_pos	token.Position
-	kind		string
+	kind		int
 }
 
 struct Position {
@@ -74,13 +74,9 @@ fn main() {
 	}
 	
 	parse_result := parser.parse_file(filename, table, .skip_comments, prefs, fscope)
+	ctx.file.module_name = parse_result.mod.name
 	for stmt in parse_result.stmts {
 		match stmt {
-			ast.Module {
-				amodule := stmt as ast.Module
-				ctx.file.module_name = amodule.name
-				continue
-			}
 			ast.FnDecl {
 				fn_decl := stmt as ast.FnDecl 
 				if fn_decl.is_method {
@@ -111,11 +107,11 @@ fn main() {
 /* --------------------------------- STRUCT --------------------------------- */
 fn (mut file File) process_struct(stmt ast.Stmt) {
 	struct_decl := stmt as ast.StructDecl
-	file.symbols << SymbolInfo{
+	file.symbols << SymbolInformation{
 		name: get_real_name(struct_decl.name)
 		pos: get_real_position(file.temp_path, struct_decl.pos)
 		real_pos: struct_decl.pos
-		kind: 'struct'
+		kind: symbol_kind_struct
 	}
 }
 
@@ -123,32 +119,32 @@ fn (mut file File) process_struct(stmt ast.Stmt) {
 fn (mut file File) process_const(stmt ast.Stmt) {
 	const_decl := stmt as ast.ConstDecl
 	for const_field in const_decl.fields {
-		file.symbols << SymbolInfo{
+		file.symbols << SymbolInformation{
 			name: get_real_name(const_field.name)
 			pos: get_real_position(file.temp_path, const_field.pos)
 			real_pos: const_decl.pos
-			kind: 'const'
+			kind: symbol_kind_constant
 		}
 	}
 }
 
 /* -------------------------------- FUNCTION -------------------------------- */
 fn (mut file File) process_fn(fn_decl ast.FnDecl) {
-	file.symbols << SymbolInfo{
+	file.symbols << SymbolInformation{
 		name: get_real_name(fn_decl.name)
 		pos: get_real_position(file.temp_path, fn_decl.pos)
 		real_pos: fn_decl.pos
-		kind: 'function'
+		kind: symbol_kind_function
 	}
 }
 
 /* -------------------------------- METHOD -------------------------------- */
 fn (mut file File) process_method(fn_decl ast.FnDecl) {
-	file.symbols << SymbolInfo{
+	file.symbols << SymbolInformation{
 		name: get_real_name(fn_decl.name)
 		pos: get_real_position(file.temp_path, fn_decl.pos)
 		real_pos: fn_decl.pos
-		kind: 'method'
+		kind: symbol_kind_method
 	}
 }
 

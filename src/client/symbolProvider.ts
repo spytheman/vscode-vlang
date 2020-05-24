@@ -3,13 +3,13 @@ import {
 	DocumentSymbolProvider,
 	Location,
 	SymbolInformation,
-	SymbolKind,
 	TextDocument,
 	Position,
 } from "vscode";
 import { getExtensionPath, getCwd } from "./utils";
 import { join } from "path";
 import { spawn } from "child_process";
+import { VSymbolInfo, VSymbolFile, VSymbolInput } from "./type";
 
 const extensionPath = getExtensionPath();
 
@@ -41,11 +41,14 @@ class VDocumentSymbolProvider implements DocumentSymbolProvider {
 				const vsymbols: VSymbolInfo[] = response.symbols;
 
 				for (const symbol of vsymbols) {
-					const range = new Position(symbol.pos.line - 1, symbol.real_pos.len + 3);
+					const range = new Position(
+						symbol.pos.line - 1,
+						symbol.real_pos.len + symbol.real_pos.line_nr
+					);
 					const newSymbol: SymbolInformation = {
 						name: symbol.name,
 						containerName: response.module_name,
-						kind: toSymbolKind(symbol.kind),
+						kind: symbol.kind,
 						location: new Location(doc.uri, range),
 					};
 					symbols.push(newSymbol);
@@ -55,26 +58,6 @@ class VDocumentSymbolProvider implements DocumentSymbolProvider {
 			child.on("close", () => resolve(symbols));
 			child.stdin.end();
 		});
-	}
-}
-
-function toSymbolKind(type: string): SymbolKind {
-	switch (type) {
-		case "method": {
-			return SymbolKind.Method;
-		}
-		case "struct": {
-			return SymbolKind.Struct;
-		}
-		case "function": {
-			return SymbolKind.Function;
-		}
-		case "const": {
-			return SymbolKind.Constant;
-		}
-		default: {
-			return SymbolKind.Variable;
-		}
 	}
 }
 
