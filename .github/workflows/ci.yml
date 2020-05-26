@@ -13,7 +13,7 @@ jobs:
           cd ~
           git clone https://github.com/vlang/v.git
           cd v
-          make CC=clang
+          make CC=gcc
           sudo ./v symlink
       - uses: actions/checkout@v2
       - name: Compile VSymbols
@@ -38,8 +38,8 @@ jobs:
           cd ~ 
           git clone https://github.com/vlang/v.git 
           cd v 
-          make CC=clang
-          ./v symlink
+          make CC=gcc
+          .\v.exe symlink
       - uses: actions/checkout@v2
       - name: Compile VSymbols
         run: v ./src/vsymbols -o ./bin/vsymbols
