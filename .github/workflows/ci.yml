@@ -6,11 +6,9 @@ jobs:
   build-ubuntu:
     runs-on: ubuntu-latest
     steps:
+      - name: Installing v
+        run: cd ~; git clone https://github.com/vlang/v.git; cd v; make CC=clang; sudo ./v symlink
       - uses: actions/checkout@v2
-      - name: Set up V version latest
-        uses: nocturlab/setup-vlang-action@v1
-        with:
-          v-version: latest
       - name: Compile VSymbols
         run: v ./src/vsymbols -o ./bin/vsymbols
       - uses: actions/setup-node@v1
@@ -28,11 +26,9 @@ jobs:
     env:
       VFLAGS: -cc gcc
     steps:
+      - name: Installing V
+        run: cd ~; git clone https://github.com/vlang/v.git; cd v; make CC=clang; sudo ./v symlink
       - uses: actions/checkout@v2
-      - name: Set up V version latest
-        uses: nocturlab/setup-vlang-action@v1
-        with:
-          v-version: latest
       - name: Compile VSymbols
         run: v ./src/vsymbols -o ./bin/vsymbols
       - uses: actions/setup-node@v1
